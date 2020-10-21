@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>template</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script> 
+</head>
+                  
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="item in students">
+                <span>{{item}}</span>
+                <span>{{item.id}}</span>
+                <span>{{item.name}}</span>
+                <span>{{item.age}}</span>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    new Vue({
+        el:'#app',
+        data:{
+            msg:'hello',
+            students:[{
+                id:1,
+                name:'terry',
+                age:12
+            },{
+                id:2,
+                name:'terry2',
+                age:13
+            },{
+                id:3,
+                name:'terry3',
+                age:14
+            }]
+        },
+        created(){
+
+        },
+        methods:{
+                handleadd(){
+                  
+                }
+        }
+    })
+</script>
+</html>

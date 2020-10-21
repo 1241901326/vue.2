@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第一个vue</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
+</head>
+<body>
+   
+      <div id="app">
+          <p>{{msg}}</p>
+          <ul>
+              <li>{{num}}</li>
+          </ul>
+      </div>
+      
+</body>
+<script>
+    // 实例化一个vue对象
+    
+   new Vue({
+        el:'#app',
+        data:{
+            msg:'hello2',
+            num:1
+        },
+        beforecreated(){
+           
+        },
+        created(){
+            console.log(this)
+            this.changNum()
+        },
+        methods:{
+            changNum(){
+                setInterval(()=>{
+                this.num++;
+                },1000)
+            }
+        }
+    })
+   
+    
+
+</script>
+</html>

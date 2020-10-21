@@ -1,0 +1,95 @@
+2020/10/21
+mvc 
+mvvm
+1.定义在data中变量和定义在 methods中 的属性和方法我们都可以通过vue实例进行访问
+ let vm = new Vue({
+     data:{
+         a:1,
+         b:2
+     },
+     methods:{
+         sayHello()
+     }
+ })
+ vm.a
+ vm.sayHello()
+ 2.在vue中，在methods中的方法\生命周期钩子函数中的this指向当前vue实例
+ 3.生命周期钩子函数
+
+    beforeCreate  vue实例创建之前，vue实例存在，但是data中的属性和methods中的方法
+                 还没有绑定到该实例中
+    created()  Vue实例已创建完毕，但是数据还没有渲染到页面中，经常在这个
+    阶段进行数据的初始化（ajax）
+
+    beforeMount 当model中的数据绑定到view之前
+
+    mount     model中的数据绑定到view上
+    
+    beforeupdate  model数据变化引起view改变之前
+    update        model 数据变化引起view改变之后
+4.模板语法
+    vue可以声明式将vue中的数据绑定在html中
+    模板:(自己写的不是真的，而是模板，就是虚拟DOM)
+    <p>{{msg}}</p>
+    原理：（vue帮助进行dom操作）
+    var msg = vm.data.msg
+    var $p = $('<p>+msg+</p>')
+    $p.appenTo($('body'))
+渲染函数：render
+    1）文本插值：
+        <span>message:{{masg}}</span>
+        <span v-once>message:{{masg}}</span>值不会再变
+    2)js表达式
+        可以在大括号中直接插入js表达式
+        {{age>16?:'成年人':'未成年人'}}
+    3）原始的html
+      <p>{{msg}}</p>              //<strong>hello</strong>
+        <p v-html='msg'></p>        // hello
+    4)属性绑定指令
+    属性绑定不能使用双大括号的方法，这个时候可以使用
+    v-bind:属性名 = '变量'
+    <p v-bind:class='myclass'>{{msg}}</p>
+    5)显示与隐藏指令
+        
+     <p v-html='msg'  v-show='isShow'></p>
+       isshow为flase 元素不会渲染到页面中
+    6)事件绑定指令
+        <div v-on:click="">btn</div>   
+    7)指令缩写
+     ： @
+    8)列表渲染
+    使用 key  管理可复用的元素，为了提升效率，节约成本，vue可能会
+    复用元素，如果我们不希望它复用，可以给他添加key
+    <template v-if="loginType === 'username'">
+    <label>Username</label>
+    <input placeholder="Enter your username" key="username-input">
+    </template>
+    <template v-else>
+    <label>Email</label>
+    <input placeholder="Enter your email address" key="email-input">
+    </template>
+    如上 代码。当切换登录方式的时候，input不会重新创建，而是复用，这个时候
+    引发很多问题，不如value会残留，可以为input添加一个key属性，表示input式
+    独立的，不能复用的
+
+    v-for="(item,index) in students"
+    1)遍历数组
+        <li v-for="item in students" :key="item.id">
+                <span>{{item.id}}</span>
+                <span>{{item.name}}</span>
+                <span>{{item.age}}</span>
+            </li>
+    2)遍历对象
+    3）
+        考虑：
+         number
+         如果num发生变化，vue会自动将变化的值渲染页面中
+
+         array
+         如果在数组中添加了一个元素，是否会触发vue的视图更新？
+         按理说不好，但是vue将被监听的数组的变异方法进行了包裹，
+         所以他们也将触发视图更新
+            push() pop() shift() unshift() splice() sort() reverse()       
+    
+
+    
