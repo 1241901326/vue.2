@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$emit()</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>     
+
+</head>
+<body>
+<div id="app" >
+    <div :v-if='isshow' @close='handler' :style="one">
+        <my-alert>你好</my-alert>
+    </div>
+    
+</div>    
+</body>
+ <script>
+
+       new Vue({
+      el:'#app',
+      data:{
+        isshow: true,
+        one:{
+            border: '1px solid pink',
+            width:'300px',
+            height:'20px',
+            background:'red'
+        }
+      },
+      methods:{
+        handler(){
+            this.isshow = false
+        }
+      } ,
+      components:{
+          'my-alert':{
+              template:`
+               <div class='alert' @click="handle">
+                  <slot></slot>
+                </div>
+              `,
+              data(){
+                  return{
+                    
+                  }
+              },
+              methods:{
+                handle(){
+                    this.$emit('close')
+                }
+                
+              }
+          }
+      }
+    })
+ </script>
+</html>

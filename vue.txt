@@ -90,6 +90,212 @@ mvvm
          按理说不好，但是vue将被监听的数组的变异方法进行了包裹，
          所以他们也将触发视图更新
             push() pop() shift() unshift() splice() sort() reverse()       
+5.表单输入绑定
+    可以使用v-model 指令再表单input textarea select元素
+    上创建双向数据绑定
+                初始化
+
+
+6.事件处理
+    0）基础处理
+        1.事件三要素
+            事件对象（event对象）
+
+            事件处理函数（匿名函数）
+            事件源（dom对象）
+        2.事件流
+            事件捕获
+            事件冒泡
+        3.事件代理
+            将事件绑定在当前元素的父元素上，而不是当前元素上，当期元素的
+            同级元素就可以动态获取与删除
+            event.target 用户点击的元素
+             1)dom  
+                var dom = document.getElementBbyId('ONE')
+                dom.onclick = function(event){}
+                dom 事件源
+                匿名函数为事件处理对象
+                event为事件对象
+            2）jquery
+                var $dom = $('#ONE')
+                $dom.on('click',function(event){})
+                $dom事件源
+                 匿名函数为事件处理对象
+                event为事件对象
+            3）vue
+                <div id="app">
+                    <button @click='addHanler'>添加</button>
+                </div>
+                new Vue({
+                    el:'#app',
+                    methods:{
+                        addHanler:function(event){
+
+                        }
+                    }
+                })
+                声明式事件绑定
+                button事件源
+                addHanler为事件处理函数
+                event为事件对象
+
+                1.事件绑定
+                    <div @click="addHanler($event,1,2)">添加</div>
+
+                methods:{
+                    addHanler:function(event){
+
+                    }
+                }
+                2.事件修饰符
+                   v-on:click.stop =>  event.stopPropagation()
+                    v-on:submit.prevent = >event.preventDefault()
+                    .once => 绑定一次
+                3.  按键修饰符
+                    v-on:keyup.enter
+                    v-on:keyup.13
+                    .enter  .tab
+                4.辅助修饰符
+                 ctrl
+7.计算属性和监听器
+    1）监听器：watch 监听数据的变化的
+     1.简洁
+        watch:{
+            "param.keywords":function(new_v,old_v){
+
+            }
+        }
+     2.详细(可以检测对象的变化)
+        watch:{
+            handler:function(new_v,old_v){},
+            deep:true
+        }
+    2）计算属性
+        初衷，用于简单运算，在模板中放入太多的逻辑会让模板过重
+        且难以维护
+        解决{{message.split('').reverse().join('')}}
+        
+        方法：
+        computed:{
+        reversedMessage:function(){
+            return this.msg.split('').reverse().join('')
+            //必须有返回值
+        },
+        upperMsg:function(){
+            return this.msg.toUpperCase()
+        }}
+        0.作用
+            想要将data中 的值经过处理之后再显示而非直接显示
+
+        1.计算属性【缓存】 vs 方法
+            <p>  {{reversedMessage}}</p>
+            <p>  {{reversedMessage}}</p>
+            <p>  {{reversedMessage}}</p>
+            <p> {{toreversedMessage()}}</p>
+            <p> {{toreversedMessage()}}</p>
+            <p> {{toreversedMessage()}}</p>
+        computed 有缓存 计算一次 
+8.class与style绑定
+        1） style
+                    <div style="color:#fff;background:teal;">hello</div>
+        <div :style="str">hello</div>
+        <div :style="[obj1,obj2]">hello</div>
+        2)class的绑定
+        比 style多
+        错误  <div :sytle='{one:true,two:false}'>{{msg}}</div>
+        正确  <div :class='{one:false,two:false}'>{{msg}}</div>
+9.组件
+    components
+    获取父组件给子组件传值<slot></slot>
+    1.组件注册
+      1）全局注册
+        new Vue（）
+        Vue.component()
+      2)局部注册
+    2.组件名
+        1）my-component-name  myComponentname
+    3.prop
+    父组件 -----》子组件
+    使用
+    <my-component :data='students'></my-component>
+
+    定义
+     'my-component':{
+                template:`
+                        <ul>
+                    <li v-for='i in data'>
+                        {{i.name}}{{i.age}}
+                    </li>
+                </ul>`,
+                props:['data'],
+                或者 props:{
+                    data:array
+                }
+                data(){
+                    return{
+                        
+                    }
+                },
+    4.父组件向自组缉拿传递指定类型的值
+      :a = "12"
+    5.自定义事件
+        子组件--》父组件
+         <div :v-if='isshow' @close='handler' :style="one">
+        <my-alert>你好</my-alert>
+    </div>
+
+    'my-alert':{
+              template:`
+               <div class='alert' @click="handle">
+                  <slot></slot>
+                </div>
+              `,
+              data(){
+                  return{
+                    
+                  }
+              },
+              methods:{
+                handle(){
+                    this.$emit('close')
+                }
+                
+    6.插槽
+    父组件----》子组件
+        dom片段
+
+     父组件在调用子组件的时候，父组件在子组件的标签中添加的
+     内容想要传递给子组件，子组件需要通过<slot>来接受
+     <my-component>
+        <div class='title'>hello</div>
+     </my-component>
+
+     Vue.component('my-component',{
+         template:`
+         <div class='alert'>
+           <slot></slot>
+         </div>
+         `
+     })
+10.脚手架
+     2）利用脚手架创建
+     vue create apo01
+     3) 结构
+       src
+        assets  静态资源
+        components  组件（表格，导航，模态框）
+        views        组件（子页面组件）
+        main.js  程序的入口，根组件定义的地方
+        app.vue  第一个组件
+      public  公共资源
+            index。html  提供真实的根dOm
+      node_modules  依赖
+      package.json  项目配置文件
+      babel.config.js  babel 配置
+      vue.config.js  webpack 配置
+11.组件库
+    element-ui
+    vant
     
 
     

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算属性</title>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>        
+</head>
+<body>
+    <div id="app">
+        <div style="color:#fff;background:teal;">hello</div>
+        <div :style="str">hello</div>
+        <div :style="[obj1,obj2]">hello</div>
+        <!-- <p>{{msg}}</p> -->
+      <p>  {{reversedMessage}}</p>
+      <p>  {{reversedMessage}}</p>
+      <p>  {{reversedMessage}}</p>
+      <p> {{toreversedMessage()}}</p>
+      <p> {{toreversedMessage()}}</p>
+      <p> {{toreversedMessage()}}</p>
+      
+        <!-- <p>{{reversedMessage}}</p>
+        <p>
+            {{msg.split('').reverse().join('')}}
+        </p> -->
+    </div>
+</body>
+<script>
+     new Vue({
+        el:'#app',
+    data:{
+        msg:'hello world',
+        str:'color:#fff;background:teal',
+        obj1:{
+            color:'#fff',
+            background:'teal'
+        },
+        obj2:{
+           border:'1px solid #ccc'
+            
+        }
+    },
+    methods:{
+        toreversedMessage(){
+            console.log('methods'+Math.random())
+            return this.msg.split('').reverse().join('')
+    },
+       
+    },
+    created(){
+        setInterval(() => {
+            this.msg += 'a'
+        }, 3000);
+    },
+    computed:{
+        reversedMessage:function(){
+            console.log('computed'+Math.random())
+            return this.msg.split('').reverse().join('')
+            //必须有返回值
+        },
+        upperMsg:function(){
+            return this.msg.toUpperCase()
+        }
+    }
+     })
+</script>
+</html>
