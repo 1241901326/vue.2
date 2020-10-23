@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>props</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.css">
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>     
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+>
+</head>
+<body>
+    <div id="app">
+        <div class="customer">
+            <!-- 按钮 -->
+            <div class="btns">
+                 <div class="btn btn-primary" id="btn_add" @click='addHandler'>添加</div>
+                 <div class="btn btn-danger" id="btn_batch_delete" @click='batchDeleteHandler'>批量删除</div>
+            </div>
+            <!-- 表单 -->
+            <form @submit.prevent='submitHandler' id="customer_form" class="mb-1">
+                <input type="hidden" v-model="customer.id" >
+                用户名<input type="text" v-model='customer.realname'>
+                密码<input type="password" v-model='customer.password'>
+                手机号<input type="text" v-model='customer.telephone'>
+                <input type="submit" class="btn btn-primary" value="提交" >
+
+            </form>
+            <!-- 表格 -->
+            {{ids}}
+             <hr>
+             <table class="table" id="cutstomer_tbl">
+                 <thead class="text-center">
+                     <tr>
+                         <td width='60px'>编号</td>
+                         <td>姓名</td>
+                         <td>密码</td>
+                         <td>手机号</td>
+                        <td>操作</td>
+                     </tr>
+                 </thead>
+            <tbody>
+                    <tr v-for = 'c in customers'>
+                        <td>
+                            <input type="checkbox" v-mode='ids' :value='c.id'>
+                        </td>
+                        <td>{{c.realname}}</td>
+                        <td>{{c.password}}</td>
+                        <td>{{c.telephone}}</td>
+                      
+                            <td>
+                                <a href="" @click.prevent='deleteHandler(c.id)'>删除</a>
+                                <a href="" @click.prevent = 'toUpdateHandler(c)'>修改</a>
+                            </td>
+                      
+                    </tr>
+            </tbody>
+             </table>
+                
+       
+                 
+        </div>
+     
+    </div>
+</body>
+<script>
+    import $ from 'jquery'
+    let store = new Vuex.Store
+    new Vue({
+        el:'#app',
+        data:{
+            customer:{},
+            customers:[],
+            ids:[]
+        },
+        
+        methods:{
+            reloadData(){
+                var url = 'http://47.106.244.1:8099/manager/user/findAllUser';
+                // var url = 'http://134.175.100.63:6677/customer/findAll'
+                $.get(url,(result)=>{
+                    console.log(result.data)
+                    this.customers = result.data;
+                })
+
+
+            },
+            addHandler(){},
+            batchDeleteHandler(){},
+            toUpdateHandler(row){},
+            deleteHandler(id){},
+            // 提交
+            submitHandler(){}
+
+        },
+        created(){
+            this.reloadData()
+        },
+
+    })
+</script>
+</html>

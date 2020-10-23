@@ -42,21 +42,26 @@
                 </el-table>
                </div>
                 <!-- 模态框 -->
-                <el-dialog title="收货地址" :visible="dialogFormVisible">
+     
+                <el-dialog title="收货地址" :visible="dialogFormVisible" @close="dialogFormVisible = false">
+                               {{form}}
                     <el-form :model="form">
-                        <el-form-item label="活动名称" :label-width="formLabelWidth">
-                        <el-input v-model="form.name" autocomplete="off"></el-input>
+                        <el-form-item label="网名" :label-width="formLabelWidth">
+                        <el-input v-model="form.realname" autocomplete="off"></el-input>
                         </el-form-item>
-                        <el-form-item label="活动区域" :label-width="formLabelWidth">
-                        <el-select v-model="form.region" placeholder="请选择活动区域">
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
+                        <el-form-item label="角色" :label-width="formLabelWidth">
+                        <el-input v-model="form.role" autocomplete="off">
+                            <!-- <el-option label="区域一" value="user"></el-option>
+                            <el-option label="区域二" value="root"></el-option> -->
+                        </el-input>
+                         <el-form-item label="密码" :label-width="formLabelWidth">
+                        <el-input v-model="form.password" autocomplete="off"></el-input>
+                        </el-form-item>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                        <el-button type="primary" @click="addHandler">确 定</el-button>
                     </div>
                     </el-dialog>
       
@@ -79,12 +84,19 @@
             this.reloadData()
         },
         methods:{
-            //创建按钮
-            onSubmit(){
-
+            addHandler(){
+                let url = 'http://47.106.244.1:8099/manager/user/reg'
+                $.post(url,(result)=>{
+                    this.form = result.data;
+                    console.log(result.data)
+                    this.from = {}
+                    
+                })
             },
+           
             //添加按钮
             toAdd(){
+                this.from = {}
                 this.dialogFormVisible = true
 
             },

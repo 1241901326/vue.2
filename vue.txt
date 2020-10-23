@@ -296,6 +296,120 @@ mvvm
 11.组件库
     element-ui
     vant
+
+14.vuex
+    状态管理机制
+    父组件 -变量-> 子组件 props
+    父组件 -模板-> 子组件  slot
+    子组件 -事件->  父组件  自定义事件
+
+    状态 = 共享变量 = ajax获取的后台数据、state
+
+    1）要素
+        state   用于存放状态
+            store.state.a
+        getters  用于获取状态，控制  直接获取
+            a(){
+                return a.filter() //处理一下再获取
+            }
+        mutation  突变 ,同步修改state值的方式
+            increment(state){
+                
+            }
+            stroe.commit('increment')
+        Action  动作，支持异步操作，提交突变
+
+15.jquery 与axios
+    1)机制
+        axios 基于 promise
+        axios.get(uel).then(()=>{}).catch(()=>{})
+        jquery 基于回调函数
+        $.ajax({
+            url,
+            success:()=>{
+
+            },
+            error:()=>{}
+        })
+        $.get(url,()=>{})
+    2)data 参数，请求头 post提交
+    axios 
+        默认Content-Type:application/json
+
+        OPTIONS 
+            探路协议，
+        POST
+    jquery
+        默认Content-Type:application/x-www-form-urlencoded
+        POST
+
+
+16.路由机制 vue-router
+  html中
+    <router-link to ='/user'></router-link>   按钮，点击后可以引起router-view的变化
+    <router-view></router-view>   容器，承载变化的内容
+
+    浏览器地址栏发生变化
+    1）实现机制
+        1.定义子组件
+            var User = {
+                template:``,
+                data(){
+                    return {
+
+                    }
+                }
+            }
+
+        
+        2.在路由中注册
+            const  routes = [
+                {path:'/user' ,component: User}
+                {path:'/product' ,component: product}
+            ]
+            const  touer = new  VueRouter({
+                routes
+            })
+        3. 将路由的实例注册在vue中
+                new Vue({
+                    router ,
+                    store
+                })
+        4. back 回退
+    2）编程式路由
+      this.$router.push(path)
+    3）传参
+        let routes = [{
+            path:'/user/:id',
+            component:'User'
+            props:true
+        }]
+            this.$router.push('/user/1001')
+
+            let User = {
+                //期望从父组件接受的变量
+                props:['id']
+                created(){
+                    this.$route.params.id
+                }
+            }
+    4)导航守卫
+        登录拦截处使用
+        router.beforeEach((to,from,next)=>{
+            console.log(to);
+            console.log(from);
+            console.log(next)
+            //调用该函数才能放行
+            next（）
+        })
+    5）脚手架中应用
+        跳转到详情
+        this.$route.push('/xiangqing')
+
+        详情上方
+    
+
+    
     
 
     
