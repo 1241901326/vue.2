@@ -4,8 +4,9 @@
         <el-button type="primary" size="small" @click="toAddHandler">添加</el-button>
     <!--<el-button type="danger" size="small" @click='bacthDeletehandler'>批量</el-button>-->
         <!-- 搜索 -->
+        {{idd}}
         <div class="select">
-          <el-input v-model="list.status" clearable="true" placeholder="请输入状态" />
+          <el-input v-model="idd" clearable="true" placeholder="请输入状态" />
             <div class="btn">
         <el-button type="primary" size="small" @click="submitHanlderbyStatus">查询</el-button>
       </div>
@@ -13,7 +14,8 @@
 
         <!-- 表格 -->
         <el-table
-      :data="custermers"
+      :data="customers"
+  
       stripe
       style="width: 100%"
     >
@@ -53,16 +55,19 @@
         </el-table>
         
         <!-- 分页 -->
-        <el-pagination
+        <!-- <el-pagination
             background
-            layout="prev, pager, next"
-            :total="1000">
-            </el-pagination>
+            layout="total,prev, pager, next"
+            :page-size='this.list.pageSize'
+            :total="total"
+            @current-change='changePageNum'>
+            </el-pagination> -->
 
          <!-- 模态框 -->
         
 <el-dialog :title="title" :visible.sync="dialogFormVisible">
       <el-form ref="ruleForm" :model="form"  label-width="120px">
+        {{form}}
         <el-form-item label="用户名" prop="username">
           <el-input v-model="form.username" clearable="true" placeholder="请输入用户名" />
         </el-form-item>
@@ -90,45 +95,113 @@
     </div>
 </template>
 <script>
-import {mapState,mapActions} from 'vuex'
+import { mapState,mapActions} from 'vuex'
 export default {
     data(){
         return{
-            
-            list:{},
-            dialogFormVisible:false,
             form:{},
-            title:'添加顾客信息'
+            list:{
+              page:0,
+              pageSize:6
+            },
+            idd:10,
+            dialogFormVisible:false,
+           
+             title:'添加顾客信息',
+            //检查内容
+            ruleForm:{
+              username:'',
+              realname:'',
+              telephone:'',
+              password:'',
+              id:''
+            },
+            //检查方式，跟模态框的:rules= 'rules' 对应
+            rules:{
+                     username: [
+                      { required: true, message: '请输入用户名', trigger: 'blur' }
+                    ],
+                    realname: [
+                      { required: true, message: '请输入姓名', trigger: 'blur' }
+                    ],
+                    telephone: [
+                      { required: true, message: '请输入手机号', trigger: 'blur' }
+                    ],
+                    password: [
+                      { required: true, message: '请输入密码', trigger: 'blur' }
+                    ],
+                    status: [
+                      { required: true, message: '请选择状态', trigger: 'change' }
+                    ]
+            }
+          
         }
     },
     created(){
-        this.findAllcustermer()
+        this.findAllCustomer()
+        // this.load()/
+        
+        // this.load()
+       
     },
     computed:{
-        ...mapState('customer',['customers'])
+       ...mapState('customer',['customers','total'])
     },
     methods:{
+      // load(){
+      //   console.log(this.total)
+      //   this.loadType(this.list)
+      // },
+      //  load(){
+        //  let obj = {
+        //    page:this.list.page,
+        //    pageSize:this.list.pageSize
+        //  }
+        //  this.findAllCustomer(obj).then(r=>{
+        //    this.totals =this.total
+        //  })
+        //  this.loadType(this.list)
+      
+      //改页码
+      changePageNum(){
+        this.list.page = page -1 
+        this.loadType(this.list)
+      },
          //提交
          submit(){
-
+           this.submitCustomers(this.form)
+           this.dialogFormVisible = false
          },
         //关闭
         close(){
             this.dialogFormVisible = false;
         },
-      ...mapActions('custermer', ['findAllcustermer']),
+      ...mapActions('customer', ['findAllCustomer','chaxun','loadType','submitCustomers','todeletHandler']),
         // 添加
     toAddHandler(){
         this.dialogFormVisible = true;
+        this.form = {}
     },
     // 编辑
-    editHandler(){},
+    editHandler(row){
+
+        this.dialogFormVisible = true;
+          this.form = row
+    },
     // 详情
-    detailsHandler(){},
+    detailsHandler(id){
+      this.$router.push({name:'Details',params:{id}})
+    },
     // 删除
-    deleteHandler(){},
+    deleteHandler(id){
+     
+      this.todeletHandler(id);
+    },
     //查询
-    submitHanlderbyStatus(){}
+    submitHanlderbyStatus(){
+     
+      this.chaxun(this.idd)
+    }
     }
 }
 </script>

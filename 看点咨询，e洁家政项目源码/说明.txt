@@ -1,0 +1,15 @@
+cms-TheFinalVersion
+	看点咨询项目
+	运行方式  右键index.html文件 使用live server插件打开 没有的安装一下
+
+customer_app
+	家长app顾客端
+	运行方式 项目根目录下 执行 npm run serve
+
+ej_manager
+	家政后台管理系统
+	运行方式 项目根目录下 执行 npm run dev
+
+waiter_app
+	员工端app
+	运行方式 项目根目录下 执行 npm run serve

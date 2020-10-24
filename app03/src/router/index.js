@@ -5,6 +5,7 @@ import Customer from '../views/customer'
 import Category from '../views/category.vue'
 import Order   from  '../views/order.vue'
 import Product   from  '../views/product.vue'
+import Details from '../views/Details.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -32,6 +33,11 @@ const routes = [
     name:'Product',
     component:Product
   },
+  {
+    path:'/details',
+    name:'Details',
+    component:Details
+  }
 
 ]
 
