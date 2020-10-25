@@ -405,10 +405,13 @@ mvvm
     5）脚手架中应用
         跳转到详情
         this.$route.push('/xiangqing')
-
+         this.$router.push({ name: 'order' })
         详情上方
     
+17.总结
+    nextTick()，是将回调函数延迟在下一次dom更新数据后调用，简单的理解是：当数据更新了，在dom中渲染后，自动执行该函数，
 
+    $refs 是所有注册过的ref的一个集合，
     
     
 
