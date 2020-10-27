@@ -1,0 +1,874 @@
+1.浏览器
+注释： css /* */
+     html  <!-- -- >
+     js  // /**/
+    (1) 浏览器类型，主流浏览器的内核
+        ie safari Chrome(谷歌) Mozila Firefox(火狐) Opera
+
+        Triden内核 （ie）
+        Gecko       (Firefox) 读geko
+        WebKit   (Safari Chrome)
+        Presto  (Opera)
+     (2) 对浏览器其内核的理解
+    浏览器的内核主要分为三个技术分支：排版渲染引擎、js引擎，以及其他
+    排版渲染引擎：主要负责获得网页的内容(HTML,XML,图像),整理信息，以及
+        计算网页的显示方式，然后输出到显示器
+    js引擎：使用路渲染js的，js 的渲染速度越快，动态网页的展示也越快
+
+        TCP三次挥手：
+          1.客户端向服务器端发送连接请求
+          2.服务器端接受请求后向客户端发送同意信号
+          3.客户端收到信号后，再次向服务器端发送确认信号
+        四次挥手：
+           1.客户端向服务器发送连接释放报文
+           2.服务器收到连接释放报文，发出确认报文
+           3.服务器将最后的数据发送完毕后，发送释放报文
+           4.客户端收到释放报文后，发出确认。
+    (3)一个页面从输入URL到页面加载显示完成，这个过程中都发生了什么
+      1）浏览器根据请求的URL交给DNS域名解析，找到真实IP
+      2）浏览器根据IP地址向服务器发送TCP请求，与浏览器建立TCP三次握手
+        a。客户端向服务器端发送一个建立链接的请求
+        b。服务器端接受请求后发送同意链接的信号
+        c。客户端接到同意链接的信号后，再次向服务器发送了确认信号，然后
+            客户端与服务器端的链接建立成功
+            为什么需要三次握手：是面向连接的
+     3）浏览器发送HTTP请求
+     4）服务器处理请求并返回HTTP报文
+     5） 浏览器接收响应，读取页面内容，解析html源码，生成DOm树 
+         解析css样式、浏览器渲染，js交互绑定多个域名，数量不限；
+
+     (4) 浏览器缓存
+     1）sessionStorage
+        优点：可以临时存储，关闭页面标签自动回收，不支持跨页面交互+
+        缺点：只能作为临时存储，不能存储持久化
+    2) localStorage
+        优点：用于长存保存整个网站的数据，保存的数据没有过期时间，直到手动去删除
+        缺点：存在大小限制，IE8以上的IE版本才支持这个属性，目前所有的浏览器都会把localStorage的
+        值类型限定为string类型，这个在对我们日常比较常见的JSON对象类型需要一些转换
+    3）cookie
+        优点：兼容性好，几乎所有的浏览器都支持
+        缺点：大小有限制，而且每次发送请求，请求头都会带着cookie一起发过去，
+        不可超过4K大小，安全性低
+            现在基本大多数登陆的合法验证都是用COOKIE验证的
+            指定期限的为持久cookie  不指定的为会话cookie
+    4）userData
+        优点：出现时间比session Storage要早
+        缺点： IE专门的存储方式，存储大小有限制，单个文件的大小限制时128KB，一个域名
+        下总共可以保存1024KB的文件，文件个数没有限制。
+     (5) http 状态码
+      1） 以2xx开头的都表示成功响应
+        200 请求成功
+        204 请求处理成功，但是没有资源可以返回
+        206 对资源某一部分进行响应，由Content-Range制定范围的实体内容
+      2） 以3xx开头的都表示需要进行附加操作以完成请求
+      3） 以4xx开头的响应结果表示客户端发生错误
+            403 请求资源的访问被服务器拒绝了
+            404 状态码表明服务器无法找到请求的资源
+      4） 以5xx开头的响应结果表示服务器本身发送错误
+    (6) URL 和 URI 的区别
+     URI是统一资源标识符，相当于一个人身份证号码
+
+
+     URL是统一资源定位符，相当于一个人的家庭住址
+     URL由三部分组成：资源类型、存放资源的主机域名、资源文件名
+         或者四部分： 协议、主机、端口、路径
+
+    (7)http与https的区别
+        HTTPS协议需要到CA(证书颁发机构)申请证书，一般免费的证书比较少，因而需要一定费用
+        HTTP是超文本传输协议，信息是明文传输，HTTPS则是安全性的SSL加密传输协议
+        HTTP和HTTPS使用的是完全不同的链接方式，用的端口也不一样，前者是80,后者是443
+        HTTP的连接很简单，是无状态的，HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比HTTP
+         协议安全。(五状态的意思是其数据包的发送、传输和接受都是相互独立的。无链接的意思是指通信双方都不长久的
+         维持对方的任何信息)
+
+2 HTML篇
+     (1)Doctype 作用
+        告知浏览器的解析器用什么文档标准解析这个文档
+    （2）标准模式与兼容模式各有什么区别？
+        标准模式的排版和JS运作模式都是以该浏览器支持的最高标准运行
+        在兼容模式中，页面以宽松的向后兼容的方式显示，模拟老式浏览器的行为以防止站点无法工作
+        简单的说，就是尽可能地显示能显示地东西给用户看
+    （3）Doctype 文档类型
+        HTML4。01中有3种DTD(文档类型定义)声明可以选择：过度地（Transitional）、严格的（Strict）
+        和框架额(Frameset)
+    (4)语义化的理解
+        优点：
+            代码结构清晰、易于阅读，利于开发和维护
+            提高用户体验，在样式加载失败时，页面结构清晰
+            方便其他设备解析，根据语义渲染网页、
+            有利于搜索引擎话（SEO）,搜索引擎爬虫会根据不同的标签来赋予不同的权重
+            语义化标签主要有:
+                title,header,nav,main,article,h1~h6
+                ul,ol,address,canvas,dialog,aside,section,
+                figure,details,mark
+                总结：让页面内容结构化，结构更加清晰，容易阅读，有利于搜索引擎优化（SEO）
+                        【可以更加容易被搜索引擎理解】
+                    去掉css的话，还是能让页面呈现出清晰的结构
+
+    (5)HTML跟XHTML的区别
+        1）其基础语言不同
+            XHTML是基于du可扩展标记语言（xml）
+            HTML是基于标准通用标记语言(SGML)
+        2) 语法严格程度不同
+            1.XHTML语法比较严格，存在DTD定义规则
+            2.HTML语法比较松散，这样对网页编写者来说，比较方便
+        3）可混合应用不同
+            1.XHTML可以混合各种XML应用，比如MathML、SVG
+            2.HTML不能混合其他XML应用
+        4）大小写敏感度不同
+            1.  XHTML对大小写敏感，标准的XHTML标签应该使用小写
+            2. HTML对大小写不敏感
+        5)公布时间不同
+            1.XHTML是2000年W3C公布的
+            2.HTML4.01是1999年W3C推荐标准
+    (6)页面导入样式时，使用link跟@import的区别
+        1。属性差别 ，link属于XHTML标签，而@import完全是CSS提供的语法规则
+           link标签除了可以加载CSS外，还可以左很多其他的事情，比如定义RSS，
+           定义rel链接属性等，而import只能加载CSS了
+        2. 加载顺序的 差别，当一个页面被加载的时候(就是被浏览者浏览的时候)，就是
+           link引用的CSS会同时被加载，而import引用的CSS会等到页面都下载完后再加载。
+           所有有时候浏览Import加载的CSS页面时候开始会没有样式。
+        3.兼容性的差别，因为import是CSS2.1提出的所有老的浏览器不支持，import只有在
+          IE5以上的才可以识别，而LINK标签无此问题
+        4.使用 dom控制样式时的差别，当使用js控制dom去改变样式的时候，只能使用Link标签，应为import不是dom可以控制的
+            
+            总结：1.link是标签，import是css的范畴。
+                2.link除了加载CSS外还可以做其他的，比如 连接属性rel，而import只能加载css
+                3.兼容性问题，link无，import有 只有在IE5上才能识别
+                4.link加载快，import加载比较慢
+                5.link支持通过JS来操控DOM改变样式，import不可以
+        
+     (7)HTML5的新特征
+        1.语义化标签
+            aside 导航栏
+            article 独立内容
+            header
+            footer
+            nav 导航
+            
+        2.增强型表单
+          比如 input输入的类型
+        3.视频和音频标签
+        4.Canvas绘图
+        5.SVG绘图
+        6.地理定位
+        7.拖放API
+        8.web worker
+            Web Worker为Web应用程序提供了一种能在后台中运行的方法。
+            通过Web Worker可以生成多个线程同时运行，
+            并保证页面对用户的及时响应，完全不会影响用户的正常操作。
+        9.web Storage
+             存储 session stroage 临时
+                localtion  stroage 长期
+                cookie  不安全 
+        10.webSocket
+            Web Socket是一种协议、
+            本质上和baihttp、tcp一样、协议是用来说明数据是如何传输的,
+    (8)iframe的优缺点
+        优点：1.能够原封不动的把嵌入的网页展现出来
+              2.如果有多个网页引用iframe，那么你只需要修改iframe的内容，就
+                 可以实现调用的每一个页面内容的更改，方便开解
+              3.网页如果为了统一风格，又不和版本都是一样的，就可以写成一个页面，用
+                iframe来嵌套，可以增加代码的可重用
+              4.如果遇到加载缓慢的第三方内容如图标和广告，这些问题可以由iframe来解决
+        缺点：1.会产生很多页面，不容易管理
+              2.iframe框架结构又是会让人感到迷惑，如果框架个数多的话，
+                 肯会出现上下、左右滚动条，会分散访问者的注意力，用户体验度差
+              3，代码复杂，无法被一些搜索引擎索引到，这一点很关键，现在搜索引擎爬虫还
+                不能很好处理iframe中的内容，所以使用iframe会不利于搜索引擎优化
+              4.很多的移动设备 无法完全显示框架，设备兼容性差
+              5.iframe框架页面会增加服务器的http请求，对于大型网站时不可取的
+
+        设置在 <a href ='pref.HTML' target='view_frame'></a>
+                target: _blank 新文档打开
+                        ——self   当前文档打开
+                        parent  在夫框架打开
+                        top  在整个窗口打开
+     (9)img 中的alt和title属性
+        alt是图片加载失败的时候，显示在网页上的替代文字，
+        title是鼠标放在图片上边时显示的文字
+        alt是必要属性，而title不是
+
+    （10） href 制定网络资源的位置，建立和当前元素或者文档之间的关系
+           src  指定外部资源的位置，资源会应用到当前标签所在的位置（js脚本，图片）
+           1.请求资源类型不同：href 指定网络资源类型 src指定外部资源类型
+           2.href 是 建立连接，而src的话是进行替换
+           3.浏览器解析的方式不同，当解析src的时候会暂停其他资源的下载和处理，
+           直到解析完毕。 这就是为什么把js脚本放在下边的缘故
+3.CSS 
+     css3新特性：
+        2d，3d转换 /动画/媒体查询/新单位（rem/vw/vh） rgba/
+    (1)BFC （Block Formatting Contexts） 块级格式上下文
+        模块格式化上下文，一种属性，属性会影响元素与元素之间的位置、间距
+        形成条件：
+            float:给元素添加浮动
+            position:给元素添加定位
+            display:给元素添加display属性
+            overflow：给元素添加overflow属性
+        形成后出现的常见问题：
+            1.marfin重叠问题
+            2.浮动相关问题
+
+    (2)盒子模型
+        盒子分两者，默认是W3C盒子（内容盒子） 宽度等于内容宽度(越来越大)
+            另一种是IE盒子（边框盒子） 宽度等于 margin+border+
+            padding+content 
+
+    (3)overflow 属性规定当内容溢出元素框时发生的事情。(溢出)
+        处理父子组件之间边框重叠问题
+          hidden 	内容会被修剪，并且其余内容是不可见的。（隐藏）
+
+        visible 	默认值。内容不会被修剪，会呈现在元素框之外。
+         scroll 	内容会被修剪，但是浏览器会显示滚动条以便查看其余的内容。
+          auto 	如果内容被修剪，则浏览器会显示滚动条以便查看其余的内容。
+         inherit 	规定应该从父元素继承 overflow 属性的值。
+    (4) 选择器的优先级
+        ！improt 
+        行内 1000
+        id  100
+        类选择器、伪类选择器、属性选择器10
+        标签选择器、伪元素选择器  1
+        通配符选择器 其他  0
+    (5)  文本 ：line-height = height
+                text-align = center
+         盒子居中   
+            水平居中 ： margin: auto ;
+            水平垂直居中：
+                 弹性布局  
+                           justify-content:center;
+                           align-items: center; 
+                           display:flex
+                  变形
+                  高度：
+                        1) absolute 上下左右0 margin ：auto
+                              top ，left 50% marigin -间距设置
+    （6）CSS的布局方式： 表格布局
+                        伸缩盒布局
+				flex: 增大比例：flex-groe
+				      缩小比例：      flex-shrink
+				      初始大小:       flex-basis
+                        浮动布局
+                        响应式布局
+                        粘性布局
+    (10)盒子布局
+         .header{
+        width: 100%;
+        height: 40%;
+        background-color: red;
+    }
+     .main{
+         width: 100%;
+         height: 60%;
+         background-color: rosybrown;
+     }
+     .main .left{
+         width: 50%;
+         height: 100%;
+         float: left;
+         background-color: saddlebrown;
+     }
+     .main .right{
+         width: 50%;
+         height: 100%;
+
+         float: left;
+         background-color: seagreen;
+     }
+    (12)左边固定右边适应
+    (13)双飞翼布局
+         body{
+        height: 100%;
+    }
+    .header{
+        width: 100%;
+        height: 100px;
+        background-color: red;
+    }
+    .main{
+        width: 100%;
+        height: calc(100% - 200px);
+        background-color: royalblue;
+    }
+    .left{
+        width: 50px;
+        height: 100%;
+        float: left;
+        background-color: red;
+    }
+    .right{
+        width: 50px;
+        height: 100%;
+        float: right;
+        background-color: rosybrown;
+    }
+    .center{
+        background-color: saddlebrown;
+       float: left;
+        height: 100%;
+        width: calc(100% - 100px);
+        
+    }
+    .footer{
+        width: 100%;
+        height: 100px;
+        background-color: red;
+      
+    }
+    (7) rgba 和 opcity 的区别   
+            rgba 设置颜色， 子元素不会继承也就是不会透明
+            opcity 的话 子元素会继承父元素的不透明度，然后也跟着透明
+    (8) display:none  隐藏对于元素，并且不会给他分配空间
+        visible:hidden 隐藏元素，并将仍然保留他的位置
+    (9) position
+            relative 相对定位，相对于自己本身位置进行定位
+            absolute 绝对定位  相对于最近一级的定位不为static的父元素进行定位
+            fixed    固定定位 相对于浏览器或者iframe进行定位
+            statc     默认值
+            sticky    粘性定位   位置根据文档计算得出
+    (10)兼容性问题：
+        浏览器不同：加 { padding：0；margin：0}
+        谷歌浏览器下默认将小于12px的文本12px显示，添加webkit-text-size-adjust：none
+    (11)块级元素 div p ul li tr td h1   table from
+        行内元素 img span a strong  b br  input  em
+    (12) 计算calc(100% - 20px)
+          @support 检测浏览器是否支持某个css属性
+           @ media 查询
+    (13)rem 相对于html的字体大小
+        em  相对于父元素字体大小
+        元素的 width/height 用em的话相对于该元素的font-size
+        vw/vh  全称号 viewportwidth 视窗的宽度和高度，相当于屏幕宽度和高度的1%，
+        不过，处理宽度的时候%单位更合适
+        px 像素，相对长度单位
+    （(14) 画一条 0.5px的直线
+        1.height:1px transform.scale(0.5)
+         transform 属性 rotate 旋转 scale 缩放 skew扭曲  translate移动 matrix矩阵变形
+        画三角
+        two{
+            width:0;
+            height:0;
+            border:100px solid;
+            border-color:white , red , white ,transparent
+            transform-rotete(90deg)
+        }
+        
+        2.transition 
+        transition-property  设置平滑过度效果
+                            
+    (15) 清除浮动的几种方式
+        ::after/br/
+        clear: both
+        创建父级 overflow:hidden
+        父级设置高度
+        BFC 是一个独立的渲染区域，让处在bfc 内部的元素与外部的元素相互隔离，
+        定位不受影响
+
+        触发条件 position : absolute/fixed
+                 display:inline-block
+                 float
+                 overflow !== visible
+        
+
+
+
+
+4.js篇
+（1）数据类型
+    基本数据类型：Number string boolean undefined null
+    应用数据类型   Object Array  function
+    ECMScript 2015 新添加 Symbol （独一无二不可变数据类型）
+    判断数据类型的方法
+     typeof(Array null 都返回OBject) 
+     instaceof 
+     区别：typeof 一元运算，说明类型，
+            instanceof 用来测试a是某个对象的实例？
+    object.prototype.toString()
+(2) null undefined
+    null 表示变量声明了，值为“空值
+    undefined 表示不存在这个值
+            1）变量申明，没赋值返回UNdefined
+            2）函数没有返回值，默认返回undefined
+            3）调用函数，应该给函数提供的参数没有提供，该参数为Undefined
+（3）判断一个变量arr是否为数组  
+    arr instanceof Array
+    arr.constructor == Array
+    Object.prototype.toString.call(arr) =='[Object Array]'
+ (4)== 跟=== 区别
+     == 先转换为同类型然后 进行值比较
+     === 比较类型跟值，一样返回true
+ (5)箭头函数
+            function foo(x,y) { 
+            return x + y; 
+                        } 
+            // 对比
+            var foo = (x,y) => x + y;
+    特点:不需要function()关键字创建函数， 省略return关键字，默认绑定外层函数
+  (6)JSON
+    一种轻量级的数据交换格式  ，给数据一个统一的格式有利于我么编写一级解析
+    数据
+  (7)document.write和innerHTML
+     documen.write将内容写在页面内容流会导致页面全部重绘
+     innerHTMl将内容写入某个DOM节点，不会导致页面全部重绘，
+  (8)先栈再堆
+    (1)闭包
+       我理解就是：函数可以读取其他函数内部变量的函数（定义在一个函数内部的函数）
+        
+        函数跟函数内部可以访问的变量（环境）的总和。
+        不会污染全局变量，参数跟变量不会被拦截回收机制回收
+        缺点就是：增大内存使用量，造成内存泄露
+
+        比如说以前做的一个点赞系统，给a点赞 从1 点到4，然后给b点赞，结果给
+        直接从1到5了，a和b都用了一个全局变量num值，所有得使用闭包。
+            function(){
+                var lives = 50
+
+                window.奖励一条命 = function(){
+                    lives +=1
+                }
+
+                window.死一条命 = function(){
+                    lives -=1
+                }
+            }
+
+        不会污染函数值，谁调用就给谁开辟一处空间
+    
+    (2)介绍一下new操作符，具体干了什么
+        1.创建一个空对象                                                  obj{}
+        2.对象的_proto属性指向父元素的prototype                             obj.__proto__=object.prototype
+                                                                        object.call(obj)
+        3.新创建的对象由this所引用，最后隐式的返回this
+
+    (3)私有函数 、变量
+        function foo(){
+            var a = 1;
+            var fn = function(){
+                consolo.log(a)
+            }
+        }
+        //没有返回，也就是只有在foo()中才能使用
+    (4)静态变量、函数
+        function obj(){
+            obj.a=1;
+            obj.fn = function(){
+
+            }
+        }
+        consolo.log(obj.a) //1
+        var o = obj();
+        consolo.log(o.a)//undefined
+        //通过.为函数添加的属性和函数，通过对象本身任然可以访问到，
+        但是实例却不能访问
+    (5)实例对象、函数
+        function obj(){
+            this.a=1;
+            this.fn = function(){
+
+            }
+        }
+        consolo.log(obj.a) //undefined
+        var o = obj();
+        consolo.log(o.a)//1
+
+    (6)原型
+        每一个函数都有一个prototype属性，指向他们的原型。同时原型的constarct
+        属性指向构造函数
+        原型中的所有方法都会被构造函数的实例继承，而且实例对象的proto属性
+        指向原型
+
+        如果访问一个对象的属性和方法，找不到的话，那么就会访问proto属性所指的一个
+        对象，如果还找不到，再向该函数的原型上找，一直到链表结束。
+        js的对象时通过引用来传递的，当修改原型时候，与之相关的对象也会继承这一个
+        改变。
+         students(){}
+         var foo = new students()
+
+        students . prototype = students原型
+         foo.__proto__  = students原型
+         foo.name ="张三"  这是在给foo中添加nama而不是修改原型
+    (7)深拷贝和浅拷贝
+        浅拷贝  复制地址 指针
+        深拷贝   复制内容  object.assign()
+                 1.遍历
+                 2.JSON的var obj2 =JSON.parse（JSON.stringify(obj1)）//深拷贝
+                 3.Object.created();
+                    // Object.create()具体使用方法
+                    var obj = {name:'lisi'};
+                    var newObj = Object.create(obj);
+    (8)Ajax
+        异步的JavaScript和xml  （局部刷新）
+        创建快速动态网页的技术
+        用了AJAX之后，你点击，然后页面上的一行字就变化了，页面本身不用刷。
+        1)创建XMLHTtpRequest对象，也就是异步调用对象
+        2)创建新的HTTP请求，并定义该请求方法\url以及验证信息
+        3）设置响应HTTP请求状态变化的函数
+        4）发送HTTP请求
+        5）获取异步调用的数据
+        6）使用JS和DOM实现局部刷新
+     终端ajax ajax.abort()
+    (9)数组去重
+        1.利用ES6 Set去重
+            function unique(arr){
+                return Array.from(new Set(arr))
+            }
+        2.利用for嵌套for，然后splice去重
+            function unique(arr){
+                for(var i=0;i<arr.length;i++){
+                    for(var j=i+1; j<arr.length;j++){
+                        if(arr[i]==arr[i]){
+                            arr.aplice(j,1);
+                            j--;
+                        }
+                    }
+                }
+            }
+
+    (10)eval()
+        
+         功能：把对应的字符串解析成JS代码并运行
+         JSON字符串转换为JSON对象时候使用
+         避免使用eval，不安全，非常耗性能（一次解析成js语句，一次执行）
+    (11) 遍历A节点的父节点下的所有子节点
+        var b = document.getElmentById('a').parentNode.children;
+    (11)递归求和
+        function add (num1 , num2){
+            var  num = num1+num2;
+            if(num2+1>100){
+                return num
+            }else{
+                return  add(num ,num2+1)
+            }
+        }
+    (11)UA(user Agent) 用户代理
+    
+    (12)事件委托
+
+    (13)promise
+        js语言提供的一种标准化的异步管理方式，它的总体思想是，需要进行Io、等
+        待或者其他异步操作的函数，不返回真实结果，而返回一个“承诺”，函数的调用方
+        可以在合适的时机，选择等待这个承诺兑现（通过Promise的then方法的回调）
+        async
+
+        一种异步管理方式，有三种状态，pending，resolved,rejected状态。主要有2个
+        特点，状态不受外界影响，一旦状态改变，就不会再变。可以把异步操作的
+        流程表达出来，避免层层嵌套的回调函数,也就是避免‘回调地狱’
+        三种状态
+          已完成 resolved 
+          未完成 pending
+          失败      rejected
+    (14)window.onload 和document.ready的区别？
+    页面加载的顺序：域名解析->加载html->加载js和css->加载图片等
+        window.onload 是在加载完所以的文件以后(图片)才执行的一个函数
+        document.ready是在加载完文档结构以后执行
+    (15)var let 和 const 区别
+        var 定义变量，可以跨块作用域访问，不可以跨函数作用域访问
+            **跨块作用域{
+                var a = 1;
+            }
+            consolo.log(a)//1
+        let 只可以在块作用域中访问，不能够跨块作用域访问，更不能跨函数访问，不可以在    
+            同一个作用域内重复申明同一个变量
+        const 定义常量，初始化必须赋值，只能在块作用域内使用，不能修改
+        
+
+    (16)作用域
+        全局作用域  
+        函数作用域
+        块级作用域{} 包裹起来的
+    (17) 先栈再堆
+        栈区：局部变量 指针
+        堆区：数组 函数 
+        闭包中的变量并不保存中栈内存中，而是保存在堆内存中.
+    (18)垃圾回收算法
+        对于js中一个对象没有任何变量或者属性对他进行引用，也就是无法操作该对象，此时
+        这个对象就是垃圾，过多会导致内存空间的大量占用，导致程序运行变慢。
+        将对象的值设置为null,触发js的自动垃圾回收机制
+        标记清除法/引用计数法
+        1.引用计数
+            缺点：循环引用，如果两个对象相互引用，尽管他们不再使用，但是垃圾回收机制不回收
+            function cycle(){
+                var o1 = {}
+                var o2 = {}
+                o1.a =o2
+                o2.a = o1
+                return "cycle reference"
+            }
+            cycle()
+
+        2.标记清除
+    (19)内存泄漏
+        对于不再用到的内存，没有及时释放，就叫做内存泄漏
+        1)全局变量 
+        function foo (arg){
+            bar = 1
+        }
+            没有给bar 添加var 会使得其在全局变量下创建一个新的变量
+        **** 在js文件开头添加 ‘user strict’  使用严格模式
+
+        2)被遗忘的定时器和回调
+          现在浏览器跟框架（jq）可以自动删除监听器
+    (20) get 和 post
+         get 把参数通过？写在url 后用&分割
+         post将参数放在HTTP包内
+         get的url最大长度为2048字符 post没有
+         get 后退不会有影响，post 后退会重新进行提交
+4.安全问题
+    （1）XSS 跨站脚本攻击
+            类：攻击链接
+        反射型XSS
+        存储型XSS
+        DOM xss
+    (2)CSRF 跨站点请求伪造
+        用户打开浏览器，输入用户名和密码访问淘宝网页A，网页将cookie信息返回给浏览器，此时用户打开网站B
+        ，B发初攻击代码，并发初请求访问A。
+
+
+
+        CSRF攻击实例
+          CSRF攻击实例得意得意得意
+
+
+       受害者 Bob 在银行有一笔存款，通过对银行的网站发送请求 http://bank.example/withdraw?account=bob&amount=1000000&for=bob2 可以使 Bob 把 1000000 的存款转到 bob2 的账号下。通常情况下，该请求发送到网站后，服务器会先验证该请求是否来自一个合法的 session，并且该 session 的用户 Bob 已经成功登陆。
+
+        黑客 Mallory 自己在该银行也有账户，他知道上文中的 URL 可以把钱进行转帐操作。Mallory 可以自己发送一个请求给银行：http://bank.example/withdraw?account=bob&amount=1000000&for=Mallory。但是这个请求来自 Mallory 而非 Bob，他不能通过安全认证，因此该请求不会起作用。
+
+        这时，Mallory 想到使用 CSRF 的攻击方式，他先自己做一个网站，在网站中放入如下代码： src=”http://bank.example/withdraw?account=bob&amount=1000000&for=Mallory ”，并且通过广告等诱使 Bob 来访问他的网站。当 Bob 访问该网站时，上述 url 就会从 Bob 的浏览器发向银行，而这个请求会附带 Bob 浏览器中的 cookie 一起发向银行服务器。大多数情况下，该请求会失败，因为他要求 Bob 的认证信息。但是，如果 Bob 当时恰巧刚访问他的银行后不久，他的浏览器与银行网站之间的 session 尚未过期，浏览器的 cookie 之中含有 Bob 的认证信息。这时，悲剧发生了，这个 url 请求就会得到响应，钱将从 Bob 的账号转移到 Mallory 的账号，而 Bob 当时毫不知情。等以后 Bob 发现账户钱少了，即使他去银行查询日志，他也只能发现确实有一个来自于他本人的合法请求转移了资金，没有任何被攻击的痕迹。而 Mallory 则可以拿到钱后逍遥法外。 
+
+        手段：在请求地址中添加 token 并验证
+5.跨域
+    (1)跨域
+        一个域名的网页去请求另一个域名的资源
+        跨域的严格一点：只要协议 域名 端口号有任何一个不同，都被当做跨域
+    (2)同源策略
+        这里的同源策略指的是：协议，域名，端口相同，同源策略是一种安全协议。
+        指一段脚本只能读取来自同一来源的窗口和文档的属性。
+    (3)解决跨域的方法
+        1)跨域资源共享(CORS)
+        2)通过jsonp跨域(只实现GET请求)
+        3)通过修改document.domain来跨子域
+        4)window.name 来跨域
+        5)使用HTML5的window.postMessage方法跨域
+        6)web sockets
+        7)图像ping（单向）
+    (4)为什么限制跨域
+        安全问题
+    (5)为什么要跨域
+        公司内部有不同的子域，要想访问就得跨域
+
+6.性能优化
+    (1)用过的性能优化
+        1)尽可能减少HTTP请求
+            压缩代码，控制图片大小
+        2)避免在CSS中使用Expression (css表达式)
+        3)控制全局变量、缓存DOM节点查找的结果。减少IO读取操作
+        4)使用innerHTML代替DOM操作，减少DOM操作次数
+    (2)CSS Sprite是什么 
+        css精灵图， 网页图片应用处理方式
+           将一些背景图片整合到一张图片文件中，再通过
+                background-image /repeat/position进行定位
+
+
+        优点：减少图片字节，以及网页的HTTP请求，提高页面性能
+        缺点：背景一旦有少许改动，就得重新改合图片
+
+
+
+
+
+
+
+
+
+
+
+
+
+7.vue （页面收藏夹）
+  （1）路由
+      默认路由：登录页
+      权限路由：其他所有需要控制权限的路由
+    (1)vue-router的两种传参方式
+        1）router.push(字符串跟对象)
+            this.$router.push({
+                paht:'/details',
+                query:{
+                    name:'张三'，
+                    id：1
+                }
+            })
+            动态路由和query属性传值，页面刷新参数不会丢失
+            params会丢失
+        2)声明式的导航<router-link></router-link>
+        
+    (2)mvvm开发模式
+        model view  viewmodel
+        viewmodel跟model 、view 是双向绑定的，model跟view是不通信的，
+        viewmodel相当于一个观察者，当model变化通知view，view通知model
+        低耦合，可重用，独立开发，双向绑定
+        mvc模式
+        就是control把model数据用view显示出来
+        耦合度低，生命周期成本低，可维护性高，部署快
+
+    (3)v-if v-show
+        v-if 元素隐藏的时候，会在dom节点中把该元素溢出,惰性的，初始条件为假的话，就不编译，
+        只有为真，才编译，有更高的切换消耗
+        v-show 元素隐藏的时候，会再dom节点中把元素的css属性设置为display:none,
+            还保存再dom节点中，任何条件下都被编译，更高的初始渲染消耗
+        需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，
+        则使用 v-if 较好。
+
+    (4)v-for和v-if 不能一起使用
+        v-for的优先级高，每次都得遍历整个数组，影响速度。
+        1. 替换为computed属性
+        2。v-if 换 v-show
+    (5)vuex
+        状态管理模式 ，核心就是store （仓库）
+    State => 基本数据，定义了应用状态的数据结构，可以在这里设置默认的初始状态。
+    Getter => 从基本数据派生的数据，允许组件从 Store 中获取数据，mapGetters 辅助函数仅仅是将 store 中的 getter 映射到局部计算属性。
+    Mutation => 是唯一更改 store 中状态的方法，且必须是同步函数。
+    Action => 像一个装饰器，包裹mutations，使之可以异步。用于提交 mutation，而不是直接变更状态，可以包含任意异步操作。
+    Module => 模块化Vuex，允许将单一的 Store 拆分为多个 store 且同时保存在单一的状态树中。
+
+    
+    (6)SPA  单页面
+         也就是先加载出单个html页面，然后通过js动态的改变HTML(也就是div的
+         显示与隐藏) 加载之后就不会整夜刷新
+         优点： 不用频繁的切换浏览页面，前后端分离开发，减轻服务器压力
+         缺点：SEO难度较大，初次加载消耗时多
+    (7) class 和 style 的动态绑定
+      对象绑定：
+        <div v-bind:class='{ action:isAction}'>
+        data:{
+            isAction:true
+        }
+      数组绑定：
+      <div v-bind:style ="{styleColor ,styleSize}"
+    (8)Vue的单项数据流
+        父组件中的数据发生改变，子组件会自动接受这个修改后的数据，
+        而子组件发生改变，父组件去无法接受，可以使用$emit派发一个
+        自定义事件
+    (9)computed 和 watch 区别
+     computed计算属性，依赖其他的属性值，而且有缓存，只有依赖的属性值
+            发生变化，下一次获取computed的时候才会再一次计算
+     watch 类似于数据的监听回调，每当监听的数据变化的时候都会指向
+            允许异步，并且再获得最终结果的时候可以设置中间状态
+    (8)
+    mount 挂载
+        befroeCreate - create -befroeMount -mount -beforeUpdate
+        -update - beforeDestory -Destory
+    (9)父组件监听子组件的生命周期
+        父组件 @mounted
+        子组件 $.emit（mounted）
+        手动的$emit
+        2）父子组件通过 @hock 来监听
+        
+    (10)keep-alive
+           用于缓存组件，保持渲染
+    (11) 组件中的data为什么是一个函数
+        组件中的data是用来复用的，如果是对象的话，实例之间的data值会影响
+    (12) v-model
+        也就是创建双向数据绑定，本质上是语法糖（语法糖就是简化代码书写）
+        v-model再内部为不同的输入元素使用不同的属性并抛出不同的事件
+        < input v-bind:value="something" v-on:input="something=
+         $event.target.value">
+
+         $event是指当前触发的是什么事件（鼠标事件，键盘事件等）
+        $event.target则指的是事件触发的目标，即哪一个元素触发了事件，这将直接获取该dom元素
+        target 当前被点击的元素
+        currentTarget当前所绑定事件的元素
+        
+    (13)Vue组件通信
+        vuex状态机
+        $parent $emit $ childrn
+        ref
+        props
+        route 传参数 
+            params 
+            this.$router.push({ name: 'news', params: { type: 1 }})
+            query
+            this.$router.push({ path: 'news', query: { type: type  }})
+            props
+            {
+                name: 'news',
+                path: '/news',
+                component: () => import('@/views/news'),
+                meta: { title: '新闻详情' },
+                props: { type: 1 }
+                }
+                props: ['type']
+
+
+    (14) 服务器渲染SSR
+        本来在浏览器渲染的html，现在服务器上完成，然后再发生给浏览器
+
+        优点：更好的SEO，更快的内容到达，首屏加载更快
+        缺点；服务器负荷
+    （15）路由的模式
+        hash        默认 #
+        history     能够浏览器历史记录
+        abstract
+    (16)vue 框架实现对象和数组的监听
+            vue的双向数据绑定：data变化通知view ，view变化通知data
+    (17)双向数据绑定
+      object.defineproperty(){
+          Set
+          get
+      }
+        observer 监听器 
+        watcher  订阅者
+        dep       订阅器
+        compile  解析器
+    (18)虚拟DOM 优点
+            不用手动操作DOM，只需要写好代码逻辑，框架自动进行数据双向绑定
+            跨平台
+      缺点： 无法进行极致优化
+       实现原理：
+          js 模拟真实DOM树,对真实DOM进行抽象
+          diff算法- 比较两颗DOM的差异
+          pach算法- 将两个虚拟DOM对象的差异应用到真实DOM树上
+    （19）唯一标识，让diff算法操作更加准确，快速。
+     (20) consolo.log > 微任务 > 宏任务
+            
+(1)懒加载
+    给页面的img标签的src属性定义一张小图片，然后自定义一个
+     data-src属性，指向真实的图片; 然后页面初始化或者滚动的时候
+     判断图片在不在视野中，如果在的话替换成data-src中的属性。
+
+13.当我们调用一个方法如何获取该方法的反馈结果？分别在哪种情况下使用。
+可以使用return一个值来返回结果(同步的时候使用)，或者使用回调函数来将结果抛出（异步的时候使用）。
+function test(a,b){
+return a+b;
+}
+function test(a,b,fun){
+fun(a+b);
+} 
+14.说明RegExp.prototype.test()与String.prototype.search()的异同点
+都是用于检测字符串中是否有满足正则表达式的内容
+test()是正则表达式对象调用的，支持全局检索，返回true或者false
+search()是字符串调用的，不支持全局检索,返回索引或者-1
+15.在开发过程中，我们经常会使用到cdn资源，请说明你在什么情况下使用了cdn资源，使用cdn好处在哪里？
+在ajax需要给post后台传递表单格式数据的时候，使用了qs。是从bootcdn中获取的qs的资源。
+引用第三方资源的时候使用cdn,例如导入jQuery、iconfont、animate.css等资源的，无需下载，只需要通过script或link方式导入cdn的资源即可。好处在于其加载速度高，获取方便。
+16.简述事件流
+发生在嵌套的html结构中，为每层html都绑定事件
+事件冒泡：事件由具体的点接受，从内往外传递到不具体的点接受。
+事件捕获：事件由不具体的点接受，从外往内到具体的点接受。
+DOM事件流：先事件捕获，先由不具体的点接受，从外往内到具体的点接受，然后再事件冒泡，从内往外传递到不具体的点接受。
+17.什么是事件代理？什么情况下会使用事件代理？
+不将事件处理函数直接绑定到目标dom元素上，而是绑定在其父元素上。其好处在于只需要在父元素绑定就可以为所有的子元素代理事件，当子元素动态添加或者删除的时候也不会影响。
+在子元素动态添加或者删除的时候，使用事件代理
+
+### 对象深拷贝的方法，Object.assign()拷贝的缺点
+
+Object.assign()拷贝的缺点：如果对象的属性值为基本数据类型，得到的新对象为深拷贝，如果属性值为对象或其他引用数据类型，那对于这个对象而言是浅拷贝，只是拷贝了对象的引用。
+     
+
+计算属性（有缓存，页面加载触发）
+混入
+
+         
+    
+
+
+    
+
+    

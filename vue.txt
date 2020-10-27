@@ -93,7 +93,7 @@ mvvm
 5.表单输入绑定
     可以使用v-model 指令再表单input textarea select元素
     上创建双向数据绑定
-                初始化
+                初始化F
 
 
 6.事件处理
